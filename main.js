@@ -13,12 +13,15 @@ let redMin = 50;
 let greenMin = 50;
 let blueMin = 50;
 
-let grav = .05;
+let grav = .075;
 
-let ballCount = 5;
+let ballCount = 25;
 
 let velXMax = 10;
 let velYMax = 5;
+
+let jankyBounce = false;
+let testBouce = true;
 
 // function to generate random number
 
@@ -63,6 +66,20 @@ Ball.prototype.update = function() {
     this.velY = -(this.velY);
   }
 
+  if(this.velX<(-10)){
+    this.velX = -10
+  }
+  if(this.velX>(10)){
+    this.velX = 10
+  }
+
+  if(this.velY<(-10)){
+    this.velY = -10
+  }
+  if(this.velY>(10)){
+    this.velY = 10
+  }
+
   this.x += this.velX;
   this.y += this.velY;
   this.velY += grav;
@@ -76,49 +93,63 @@ Ball.prototype.collisionDetect = function() {
       const distance = Math.sqrt(dx * dx + dy * dy);
 
       if (distance < this.size + ballList[j].size) {
-        // // If the balls bounce
-        // if(((this.velX<0) && (ballList[j].velX<0)) || ((this.velX>0) && (ballList.velX[j]>0))){
-        //   // If they are moving in the same direction
-        //   if(this.velX > ballList[j].velX){
-        //     this.velX = -(this.velX)
-        //     ballList[j].velX = this.velX
-        //   } 
-        //   else {
-        //     ballList[j].velX = -(ballList[j].velX);
-        //     this.velX = ballList[j].velX;
-        //   }
-        //   // The one that is moving faster bounces as normal, the slower one inherits the speed of the faster one
-        // } 
-        // else{
-        //   // If they are moving in opposite directions
-        //   this.velX =  -(this.velX);
-        //   ballList[j].velX = -(ballList[j].velX);
-        //   // Bounce as normal
-        // }
-        
-
-        // if(((this.velY<0) && (ballList[j].velY<0)) || ((this.velY>0) && (ballList[j].velY>0))){
-        //   if(this.velY > ballList[j].velY){
-        //     this.velY = -(this.velY)
-        //     ballList[j].velY = this.velY
-        //   } 
-        //   else {
-        //     ballList[j].velY = -(ballList[j].velY);
-        //     this.velY = ballList[j].velY;
-        //   }
-        // } 
-        // else{
-        //   this.velX =  -(this.velX);
-        //   ballList[j].velX = -(ballList[j].velX);
-        // }
-        this.velX =  -(this.velX);
-      ballList[j].velX = -(ballList[j].velX);
-      this.velY =  -(this.velY);
-      ballList[j].velY = -(ballList[j].velY);
+        // If the balls bounce
+        if(jankyBounce == true){
+          if(((this.velX<0) && (ballList[j].velX<0)) || ((this.velX>0) && (ballList[j].velX>0))){
+            // If they are moving in the same direction
+            if(this.velX > ballList[j].velX){
+              this.velX = -(this.velX)
+              ballList[j].velX = this.velX
+            } 
+            else {
+              ballList[j].velX = -(ballList[j].velX);
+              this.velX = ballList[j].velX;
+            }
+            // The one that is moving faster bounces as normal, the slower one inherits the speed of the faster one
+          } 
+          else{
+            // If they are moving in opposite directions
+            this.velX =  -(this.velX);
+            ballList[j].velX = -(ballList[j].velX);
+            // Bounce as normal
+          }
+          
+  
+          if(((this.velY<0) && (ballList[j].velY<0)) || ((this.velY>0) && (ballList[j].velY>0))){
+            // If they are moving in the same direction
+            if(this.velY > ballList[j].velY){
+              this.velY = -(this.velY)
+              ballList[j].velY = this.velY
+            } 
+            else {
+              ballList[j].velY = -(ballList[j].velY);
+              this.velY = ballList[j].velY;
+            }
+            // The one that is moving faster bounces as normal, the slower one inherits the speed of the faster one
+          } 
+          else{
+            // If they are moving in opposite directions
+            this.velY =  -(this.velY);
+            ballList[j].velY = -(ballList[j].velY);
+            // Bounce as normal
+          }
+          } else 
+        if(testBouce == true){
+          ballList[j].velX = (ballList[j].velX - this.velX);
+          this.velX = (ballList[j].velX - this.velX);
+          ballList[j].velY = (ballList[j].velY - this.velY);
+          this.velY = (ballList[j].velY - this.velY);
+          } else {
+            this.velX = -this.velX;
+            ballList[j].velX = -ballList[j].velX;
+            this.velY = -this.velY;
+            ballList[j].velY = -ballList[j].velY;
+          }
+        }
       }
     }
   }
-}
+// }
 
 let ballList = [];
 
